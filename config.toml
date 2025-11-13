@@ -1,0 +1,22 @@
+# config.toml
+
+[tuya]
+ACCESS_ID = "ym9uvvumf7skmavguvmx"
+ACCESS_SECRET = "0a998b5f88e040cd86609e1793042264"
+API_ENDPOINT = "https://openapi.tuya.com"
+
+[mongodb]
+URI = "mongodb+srv://megh23234_db_user:fHWpsiaH0NZUMdl5@cluster0.hzhu6wf.mongodb.net/"
+DB_NAME = "SmartHome"
+
+[app]
+TIMEZONE = "Asia/Dhaka"
+REFRESH_INTERVAL_SEC = 5
+
+TUYA_ACCESS_ID=ym9uvvumf7skmavguvmx
+TUYA_ACCESS_SECRET=0a998b5f88e040cd86609e1793042264
+TUYA_API_ENDPOINT=https://openapi.tuyaeu.com
+ELECTRICITY_RATE=10.0
+MONGODB_URI=mongodb+srv://megh23234_db_user:fHWpsiaH0NZUMdl5@cluster0.hzhu6wf.mongodb.net/
+MONGODB_DB=SmartHome
+TUYA_DEVICE_ID=bfec2888eb965010fam3gj

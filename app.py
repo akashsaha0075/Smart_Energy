@@ -1,5 +1,7 @@
+# =========================================================
 # app.py — Dark Dashboard (Sky Blue + Neon Cards + User Manual)
 # Streamlit >= 1.36
+# =========================================================
 
 from datetime import datetime, timedelta
 import pandas as pd
@@ -18,18 +20,18 @@ from billing import (
     aggregate_totals_all_devices
 )
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE CONFIG
-# ----------------------------------------------------
+# ---------------------------------------------------------
 st.set_page_config(
     page_title="Smart Plug — Dashboard",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # DARK THEME + SKY BLUE BUTTONS
-# ----------------------------------------------------
+# ---------------------------------------------------------
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
@@ -47,6 +49,7 @@ st.markdown("""
 }
 .brand { display:flex; align-items:center; gap:10px; }
 .brand .title { font-size:18px; font-weight:700; color:#fff; }
+
 .card {
   background: rgba(255,255,255,0.04);
   border-radius: 10px;
@@ -56,6 +59,7 @@ st.markdown("""
 }
 .metric-label { color: #aaa; font-size: 13px; }
 .metric-value { font-size: 20px; font-weight: 700; color: #fff; }
+
 /* Sky-blue buttons */
 .stButton>button {
   background: linear-gradient(90deg, #00c2ff, #0090ff);
@@ -70,6 +74,7 @@ st.markdown("""
   transform: scale(1.05);
   box-shadow: 0 4px 20px rgba(0,194,255,0.45);
 }
+
 /* Footer */
 .footer {
   text-align: center;
@@ -82,9 +87,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # SESSION STATE
-# ----------------------------------------------------
+# ---------------------------------------------------------
 if "route" not in st.session_state:
     st.session_state.route = "home"
 if "current_device_id" not in st.session_state:
@@ -93,27 +98,27 @@ if "current_device_name" not in st.session_state:
     st.session_state.current_device_name = None
 
 
-def set_route(r): 
+def set_route(r):
     st.session_state.route = r
 
 
-def go_home(): 
+def go_home():
     set_route("home")
 
 
-def go_mydevices(): 
+def go_mydevices():
     set_route("mydevices")
 
 
-def go_add(): 
+def go_add():
     set_route("add")
 
 
-def go_manage(): 
+def go_manage():
     set_route("manage")
 
 
-def go_manual(): 
+def go_manual():
     set_route("manual")
 
 
@@ -122,15 +127,15 @@ def go_device_detail(i, n):
     st.session_state.current_device_name = n
     set_route("device")
 
-
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # TOP NAV BAR
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def render_topbar():
     st.markdown("""
-<h1 style='text-align:center;font-family:Poppins,sans-serif;font-weight:700;
-font-size:2.8em;color:white;'>🌱 Green Power Monitor</h1><br><br>
-""", unsafe_allow_html=True)
+        <h1 style='text-align:center;font-family:Poppins,sans-serif;
+        font-weight:700;font-size:2.8em;color:white;'>
+        🌱 Green Power Monitor</h1><br><br>
+    """, unsafe_allow_html=True)
 
     n1, n2, n3, n4, n5 = st.columns([1, 1, 1, 1, 1])
     with n1:
@@ -157,9 +162,9 @@ font-size:2.8em;color:white;'>🌱 Green Power Monitor</h1><br><br>
 
 render_topbar()
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE: HOME
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def page_home():
     st.title("📊 Overview")
 
@@ -183,9 +188,9 @@ def page_home():
                 unsafe_allow_html=True,
             )
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE: MY DEVICES
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def page_mydevices():
     st.title("⚡ My Devices")
     devs = load_devices()
@@ -208,9 +213,9 @@ def page_mydevices():
                 go_device_detail(d["id"], d["name"])
                 st.rerun()
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE: ADD DEVICE
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def page_add():
     st.title("➕ Add Device")
     name = st.text_input("Device Name")
@@ -233,9 +238,9 @@ def page_add():
             go_home()
             st.rerun()
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE: MANAGE DEVICES
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def page_manage():
     st.title("⚙️ Manage Devices")
     devs = load_devices()
@@ -261,9 +266,9 @@ def page_manage():
                 st.warning("Device deleted.")
                 st.rerun()
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE: DEVICE DETAILS
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def page_device():
     did = st.session_state.get("current_device_id")
     dname = st.session_state.get("current_device_name")
@@ -287,20 +292,97 @@ def page_device():
         return
 
     row = res.get("row", {})
+
     v = float(row.get("voltage", 0))
     p = float(row.get("power", 0))
 
-    st.subheader("🔋 Live Power & Voltage")
-    col1, col2, col3 = st.columns([1, 1, 2])
+    # Device Status Detection (Temporary)
+    device_status = "ON" if p > 1 else "OFF"
+
+    status_color = "#00ff9d" if device_status == "ON" else "#ff4d4d"
+
+    st.markdown(f"""
+        <div style="
+        padding: 12px;
+        text-align: center;
+        background: rgba(0,20,50,0.55);
+        border: 1px solid {status_color};
+        border-radius: 10px;
+        box-shadow: 0 0 15px {status_color}55;
+        font-size: 20px;
+        font-weight: 700;
+        color: {status_color};
+        margin-top: 10px;
+        margin-bottom: 20px;
+    ">
+        Device Status: {device_status}
+    </div>
+""", unsafe_allow_html=True)
+
 
     # Gauges
-    with col1:
+        # st.subheader("🔋 Live Power & Voltage")
+        # col1, col2, col3 = st.columns([1, 1, 2])
+
+        # # Voltage Gauge
+        # with col1:
+        #     fig_v = go.Figure(go.Indicator(
+        #         mode="gauge+number",
+        #         value=v,
+        #         title={'text': "Voltage (V)", 'font': {'color': '#00c2ff', 'size': 16}},
+        #         gauge={
+        #             'shape': 'angular',
+        #             'axis': {'range': [0, max(250, v * 1.2)], 'tickcolor': '#00c2ff'},
+        #             'bar': {'color': '#00c2ff'},
+        #             'bgcolor': 'rgba(5,10,25,0.8)',
+        #             'borderwidth': 2,
+        #             'bordercolor': '#00c2ff'
+        #         }
+        #     ))
+        #     fig_v.update_layout(
+        #         template="plotly_dark",
+        #         height=230,
+        #         margin=dict(l=10, r=10, t=40, b=10),
+        #         paper_bgcolor="rgba(0,0,0,0)",
+        #         font=dict(color="#e6eef6")
+        #     )
+        #     st.plotly_chart(fig_v, use_container_width=True)
+
+        # # Power Gauge
+        # with col2:
+        #     fig_p = go.Figure(go.Indicator(
+        #         mode="gauge+number",
+        #         value=p,
+        #         title={'text': "Power (W)", 'font': {'color': '#00c2ff', 'size': 16}},
+        #         gauge={
+        #             'shape': 'angular',
+        #             'axis': {'range': [0, max(1000, p * 1.5)], 'tickcolor': '#00c2ff'},
+        #             'bar': {'color': '#00c2ff'},
+        #             'bgcolor': 'rgba(5,10,25,0.8)',
+        #             'borderwidth': 2,
+        #             'bordercolor': '#00c2ff'
+        #         }
+        #     ))
+        #     fig_p.update_layout(
+        #         template="plotly_dark",
+        #         height=230,
+        #         margin=dict(l=10, r=10, t=40, b=10),
+        #         paper_bgcolor="rgba(0,0,0,0)",
+        #         font=dict(color="#e6eef6")
+        #     )
+        #     st.plotly_chart(fig_p, use_container_width=True)
+    st.subheader("🔋 Live Power, Voltage & Current")
+
+    # Row 1 – three gauges
+    g1, g2, g3 = st.columns(3)
+
+    # --- Voltage Gauge ---
+    with g1:
         fig_v = go.Figure(go.Indicator(
             mode="gauge+number",
             value=v,
             title={'text': "Voltage (V)", 'font': {'color': '#00c2ff', 'size': 16}},
             gauge={
-                'shape': 'angular',
                 'axis': {'range': [0, max(250, v * 1.2)], 'tickcolor': '#00c2ff'},
                 'bar': {'color': '#00c2ff'},
                 'bgcolor': 'rgba(5,10,25,0.8)',
@@ -310,54 +392,89 @@ def page_device():
         ))
         fig_v.update_layout(
             template="plotly_dark",
-            height=230,
-            margin=dict(l=10, r=10, t=40, b=10),
+            height=210,
+            margin=dict(l=10, r=10, t=30, b=10),
             paper_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#e6eef6")
         )
         st.plotly_chart(fig_v, use_container_width=True)
 
-    with col2:
+    # --- Power Gauge ---
+    with g2:
+        watt_value = p / 10  # convert mW → W
+
         fig_p = go.Figure(go.Indicator(
             mode="gauge+number",
-            value=p,
+            value=watt_value,
             title={'text': "Power (W)", 'font': {'color': '#00c2ff', 'size': 16}},
             gauge={
-                'shape': 'angular',
-                'axis': {'range': [0, max(1000, p * 1.5)], 'tickcolor': '#00c2ff'},
+            'axis': {'range': [0, max(1, watt_value * 1.5)], 'tickcolor': '#00c2ff'},
+            'bar': {'color': '#00c2ff'},
+            'bgcolor': 'rgba(5,10,25,0.8)',
+            'borderwidth': 2,
+            'bordercolor': '#00c2ff'
+            }
+    ))
+
+        fig_p.update_layout(
+            template="plotly_dark",
+            height=210,
+            margin=dict(l=10, r=10, t=30, b=10),
+            paper_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#e6eef6")
+    )
+        st.plotly_chart(fig_p, use_container_width=True)
+
+    # --- Current Gauge ---
+    with g3:
+        i = float(row.get("current", 0))
+        fig_i = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=i,
+            title={'text': "A", 'font': {'color': '#00c2ff', 'size': 16}},
+            gauge={
+                'axis': {'range': [0, max(20, i * 1.5)], 'tickcolor': '#00c2ff'},
                 'bar': {'color': '#00c2ff'},
                 'bgcolor': 'rgba(5,10,25,0.8)',
                 'borderwidth': 2,
                 'bordercolor': '#00c2ff'
             }
         ))
-        fig_p.update_layout(
+        fig_i.update_layout(
             template="plotly_dark",
-            height=230,
-            margin=dict(l=10, r=10, t=40, b=10),
+            height=210,
+            margin=dict(l=10, r=10, t=30, b=10),
             paper_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#e6eef6")
         )
-        st.plotly_chart(fig_p, use_container_width=True)
-
-    with col3:
-        st.markdown("⚡ Recent Power")
-        df_recent = latest_docs(did, n=30)
-        if not df_recent.empty:
-            fig = px.line(df_recent, x="timestamp", y="power", markers=True, title="Live Power Trend")
-            fig.update_traces(line=dict(color="#00e6ff", width=2.5))
-            fig.update_layout(
-                template="plotly_dark",
-                paper_bgcolor="rgba(0,10,30,1)",
-                plot_bgcolor="rgba(0,10,30,1)",
-                font=dict(color="#00e6ff"),
-                hovermode="x unified",
-                height=260,
-                margin=dict(l=10, r=20, t=60, b=40)
+        st.plotly_chart(fig_i, use_container_width=True)
+    # Live Power Chart
+    
+    st.markdown("⚡ Recent Power")
+    df_recent = latest_docs(did, n=30)
+    if not df_recent.empty:
+        df_recent = df_recent.copy()
+        df_recent["power_w"] = df_recent["power"] / 10
+        fig = px.line(
+            df_recent,
+            x="timestamp",
+            y="power_w",
+            markers=True,
+            title="Live Power Trend"
             )
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.info("No data yet.")
+        fig.update_traces(line=dict(color="#00e6ff", width=2.5))
+        fig.update_layout(
+            template="plotly_dark",
+            paper_bgcolor="rgba(0,10,30,1)",
+            plot_bgcolor="rgba(0,10,30,1)",
+            font=dict(color="#00e6ff"),
+            hovermode="x unified",
+            height=260,
+            margin=dict(l=10, r=20, t=50, b=40)
+            )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.info("No data yet.")
 
     # Controls
     cA, cB, cC = st.columns([1, 1, 2])
@@ -378,41 +495,40 @@ def page_device():
             go_mydevices()
             st.rerun()
 
-    # ----------------------------------------------------
+    # -----------------------------------------------------
     # BILLING SECTION — Neon Blue Card Style
-    # ----------------------------------------------------
+    # -----------------------------------------------------
     st.markdown("<h3 style='color:#00e6ff;font-weight:700;'>💰 Bill Estimate</h3>", unsafe_allow_html=True)
     d_u, d_c, m_u, m_c = daily_monthly_for(did)
 
-    card_css = """
-    <style>
-    .bill-card{
-        background:rgba(0,20,50,0.6);
-        border:1px solid rgba(0,194,255,0.4);
-        border-radius:12px;
-        padding:20px;
-        text-align:center;
-        box-shadow:0 0 18px rgba(0,194,255,0.2);
-        transition:0.3s;
-    }
-    .bill-card:hover{
-        transform:scale(1.03);
-        box-shadow:0 0 25px rgba(0,194,255,0.4);
-    }
-    .bill-label{
-        font-size:15px;
-        color:#00bfff;
-        font-weight:600;
-    }
-    .bill-value{
-        font-size:26px;
-        font-weight:800;
-        color:#fff;
-        margin-top:8px;
-    }
-    </style>
-    """
-    st.markdown(card_css, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+        .bill-card {
+            background: rgba(0,20,50,0.6);
+            border: 1px solid rgba(0,194,255,0.4);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 18px rgba(0,194,255,0.2);
+            transition: 0.3s;
+        }
+        .bill-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(0,194,255,0.4);
+        }
+        .bill-label {
+            font-size: 15px;
+            color: #00bfff;
+            font-weight: 600;
+        }
+        .bill-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 8px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
     c1, c2, c3, c4 = st.columns(4)
     labels = ["Today (kWh)", "Today (BDT)", "Month (kWh)", "Month (BDT)"]
@@ -432,9 +548,10 @@ def page_device():
             </div>
             """, unsafe_allow_html=True)
 
-    # ----------------------------------------------------
+
+    # -----------------------------------------------------
     # HISTORICAL DATA
-    # ----------------------------------------------------
+    # -----------------------------------------------------
     st.markdown("### 🕰️ Historical Data")
     c1, c2, c3 = st.columns(3)
     with c1:
@@ -446,20 +563,23 @@ def page_device():
 
     start_dt = datetime.combine(start_date, datetime.min.time())
     end_dt = datetime.combine(end_date, datetime.max.time())
-
     df = range_docs(did, start_dt, end_dt)
+
     if not df.empty:
+        
         df = df.sort_values("timestamp").set_index("timestamp")
+        df["power_w"] = df["power"] / 10
         if agg != "raw":
-            df = df.resample(
-                {"1-min": "1T", "5-min": "5T", "15-min": "15T"}[agg]
-            ).mean(numeric_only=True).dropna()
+            df = df.resample({"1-min": "1T", "5-min": "5T", "15-min": "15T"}[agg]) \
+                   .mean(numeric_only=True).dropna()
+            
+        
 
         plot_df = df.reset_index()
         fig = px.line(
             plot_df,
             x="timestamp",
-            y="power",
+            y="power_w",
             title=f"⚡ Power Over Time ({agg})",
             markers=(agg == "raw")
         )
@@ -474,28 +594,120 @@ def page_device():
             margin=dict(l=20, r=20, t=60, b=40)
         )
         st.plotly_chart(fig, use_container_width=True)
-        st.dataframe(plot_df.tail(200))
     else:
         st.info("No data in selected range.")
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # PAGE: USER MANUAL
-# ----------------------------------------------------
+# ---------------------------------------------------------
 def page_manual():
-    st.title("📘 User Manual")
     st.markdown("""
-    ### Welcome to the Green Power Monitor Manual
-    **🏠 Dashboard:** Overview of all metrics.  
-    **⚡ My Devices:** View your registered smart plugs.  
-    **➕ Add:** Register a new device.  
-    **⚙️ Manage:** Edit or remove devices.  
-    **📊 Device Page:** Live power, voltage, billing, and trends.  
-    💡 *Auto-refreshes every 30 s.*
+        <h1 style='text-align:center;
+                   color:#00e6ff;
+                   font-family:Poppins,sans-serif;
+                   font-weight:800;
+                   font-size:2.2em;
+                   letter-spacing:1px;'>
+            📘 User Manual
+        </h1>
+        <p style='text-align:center;color:#99ccff;'>
+            Your guide to getting started, mastering features, and fixing issues.
+        </p><br>
     """, unsafe_allow_html=True)
 
-# ----------------------------------------------------
+    # Custom CSS for expanders
+    st.markdown("""
+        <style>
+        [data-testid="stExpander"] {
+            background: rgba(0, 20, 50, 0.45);
+            border: 1px solid rgba(0,194,255,0.3);
+            border-radius: 12px;
+            margin-bottom: 18px;
+            box-shadow: 0 0 10px rgba(0,194,255,0.15);
+        }
+        [data-testid="stExpander"]:hover {
+            box-shadow: 0 0 25px rgba(0,194,255,0.35);
+            transform: scale(1.01);
+        }
+        [data-testid="stExpander"] p {
+            color: #d8ecff;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        [data-testid="stExpander"] strong {
+            color: #00c2ff;
+        }
+        [data-testid="stExpanderHeader"] p {
+            color: #00e6ff;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: .5px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    with st.expander("🚀 Getting Started", expanded=True):
+        st.markdown("""
+            Welcome to **Green Power Monitor** — a real-time energy management system that helps you
+        monitor and control your smart plugs easily.
+
+            **Setup Steps:**
+            1. **Add a Device:** Go to ➕ Add → Enter your *Tuya Device ID* and name.  
+            2. **Authorize Access:** Configure your Tuya API keys and MongoDB credentials.  
+            3. **Dashboard:** View devices, consumption, and billing summary.  
+            4. **Live Monitor:** Click any device for real-time voltage, current, and power.  
+            5. **Billing:** View daily and monthly bill estimates.  
+
+            
+        """)
+
+    with st.expander("⚙️ Features Guide"):
+        st.markdown("""
+            **🏠 Dashboard**  
+        Displays summarized statistics — total devices, active power, voltage, and bill estimation.
+
+        **⚡ My Devices**  
+        Lists all connected smart plugs. You can open each device to monitor its data in real time.
+
+        **➕ Add Device**  
+        Register new Tuya smart plugs with your project credentials.
+
+        **⚙️ Manage Devices**  
+        Edit or delete existing devices quickly.
+
+        **🔋 Device Page**  
+        - *Live Gauges:* Half-arc accelerometer-style power & voltage meters.  
+        - *Live Chart:* Neon-blue real-time power graph.  
+        - *Billing:* Daily and monthly cost cards.  
+        - *Historical Data:* Filter by custom date range with adjustable aggregation (1 min / 5 min / 15 min).  
+
+        """)
+
+    with st.expander("🧰 Troubleshooting"):
+        st.markdown("""
+            **1️⃣ No Data Appears**
+            - Check your Tuya Device ID and API credentials.  
+            - Verify MongoDB connection.
+            - Ensure your smart plug is online and connected to the internet.
+
+            **2️⃣ Token Error**
+            - Ensure API endpoint (`tuyaeu.com`, `us`, or `cn`) matches your region.  
+            - Enable "Smart Home Management" and "Device Control" APIs on Tuya Cloud.
+
+            **Need Help?**
+            Contact **akashsaha399180@gmail.com** or check Streamlit logs.
+        """)
+
+    st.markdown("""
+        <hr style='border:1px solid rgba(0,194,255,0.3);margin-top:30px;'>
+        <p style='text-align:center;font-size:13px;color:#00c2ff;'>
+            
+        </p>
+    """, unsafe_allow_html=True)
+
+# ---------------------------------------------------------
 # ROUTER
-# ----------------------------------------------------
+# ---------------------------------------------------------
 r = st.session_state.route
 if r == "home":
     page_home()
@@ -512,7 +724,7 @@ elif r == "manual":
 else:
     page_home()
 
-# ----------------------------------------------------
+# ---------------------------------------------------------
 # FOOTER
-# ----------------------------------------------------
-st.markdown("<div class='footer'>Developed by <b>Akash Saha</b></div>", unsafe_allow_html=True)
+# ---------------------------------------------------------
+st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)

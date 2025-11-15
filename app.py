@@ -175,7 +175,7 @@ def page_home():
     cols = st.columns(5)
     data = [
         ("Devices", total_devices),
-        ("Power (W)", f"{p_now:.1f}"),
+        ("Power (W)", f"{p_now/10:.1f}"),
         ("Voltage (V)", f"{v_now:.1f}"),
         ("Today (BDT)", f"{t_bdt:.2f}"),
         ("Month (BDT)", f"{m_bdt:.2f}")
@@ -594,6 +594,7 @@ def page_device():
             margin=dict(l=20, r=20, t=60, b=40)
         )
         st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(plot_df.tail(200))
     else:
         st.info("No data in selected range.")
 
@@ -728,3 +729,4 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+

@@ -437,6 +437,10 @@ def page_device():
         fig_i = go.Figure(go.Indicator(
             mode="gauge+number",
             value=i,
+            number={
+            'suffix': " A",
+            'font': {'size': 46, 'color': '#e6eef6'}
+            },
             title={
             'text': "<b>Current (A)</b>",
             'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
@@ -738,6 +742,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 

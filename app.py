@@ -381,6 +381,10 @@ def page_device():
         fig_v = go.Figure(go.Indicator(
             mode="gauge+number",
             value=v,
+            number={
+            'suffix': " V",
+            'font': {'size': 46, 'color': '#e6eef6'}
+        },
              title={
             'text': "Voltage (V)",
             'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
@@ -409,6 +413,10 @@ def page_device():
         fig_p = go.Figure(go.Indicator(
             mode="gauge+number",
             value=watt_value,
+            number={
+            'suffix': " W",
+            'font': {'size': 46, 'color': '#e6eef6'}
+        },
             title={
             'text': "Power (W)",
             'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
@@ -742,6 +750,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 

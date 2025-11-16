@@ -315,7 +315,7 @@ def page_device():
         margin-top: 10px;
         margin-bottom: 20px;
     ">
-        Device Status: {device_status}
+        Device Status: {device_status}<b></b>
     </div>
 """, unsafe_allow_html=True)
 
@@ -381,7 +381,10 @@ def page_device():
         fig_v = go.Figure(go.Indicator(
             mode="gauge+number",
             value=v,
-            title={'text': "Voltage (V)", 'font': {'color': '#00c2ff', 'size': 16}},
+             title={
+            'text': "<b>Voltage (V)</b>",
+            'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
+            },
             gauge={
                 'axis': {'range': [0, max(250, v * 1.2)], 'tickcolor': '#00c2ff'},
                 'bar': {'color': '#00c2ff'},
@@ -406,7 +409,10 @@ def page_device():
         fig_p = go.Figure(go.Indicator(
             mode="gauge+number",
             value=watt_value,
-            title={'text': "Power (W)", 'font': {'color': '#00c2ff', 'size': 16}},
+            title={
+            'text': "<b>Power (W)</b>",
+            'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
+            },
             gauge={
             'axis': {'range': [0, max(1, watt_value * 1.5)], 'tickcolor': '#00c2ff'},
             'bar': {'color': '#00c2ff'},
@@ -431,7 +437,10 @@ def page_device():
         fig_i = go.Figure(go.Indicator(
             mode="gauge+number",
             value=i,
-            title={'text': "Current(A)", 'font': {'color': '#00c2ff', 'size': 12}},
+            title={
+            'text': "<b>Current (A)</b>",
+            'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
+            },
             gauge={
                 'axis': {'range': [0, max(20, i * 1.5)], 'tickcolor': '#00c2ff'},
                 'bar': {'color': '#00c2ff'},
@@ -729,6 +738,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 

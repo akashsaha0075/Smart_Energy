@@ -371,7 +371,7 @@ def page_device():
         #         font=dict(color="#e6eef6")
         #     )
         #     st.plotly_chart(fig_p, use_container_width=True)
-    st.subheader("🔋 Live Power, Voltage & Current")
+    #st.subheader("🔋 Live Power, Voltage & Current")
 
     # Row 1 – three gauges
     g1, g2, g3 = st.columns(3)
@@ -729,4 +729,5 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 

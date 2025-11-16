@@ -452,7 +452,7 @@ def page_device():
         fig_i.update_layout(
             template="plotly_dark",
             height=210,
-            margin=dict(l=10, r=10, t=30, b=10),
+            margin=dict(l=10, r=10, t=10, b=10),
             paper_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#e6eef6")
         )
@@ -738,6 +738,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 

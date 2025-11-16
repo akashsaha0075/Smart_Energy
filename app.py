@@ -429,7 +429,7 @@ def page_device():
     with g3:
         i = float(row.get("current", 0))
         fig_i = go.Figure(go.Indicator(
-            mode="gauge+number",
+            mode="gauge+number+"A"",
             value=i,
             title={'text': "Current(A)", 'font': {'color': '#00c2ff', 'size': 16}},
             gauge={
@@ -729,6 +729,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 

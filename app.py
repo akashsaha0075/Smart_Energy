@@ -431,7 +431,7 @@ def page_device():
         fig_i = go.Figure(go.Indicator(
             mode="gauge+number+"A"",
             value=i,
-            title={'text': "Current(A)", 'font': {'color': '#00c2ff', 'size': 16}},
+            title={'text': "Current(A)", 'font': {'color': '#00c2ff', 'size': 12}},
             gauge={
                 'axis': {'range': [0, max(20, i * 1.5)], 'tickcolor': '#00c2ff'},
                 'bar': {'color': '#00c2ff'},
@@ -729,6 +729,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 

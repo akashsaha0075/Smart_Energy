@@ -315,7 +315,7 @@ def page_device():
         margin-top: 10px;
         margin-bottom: 20px;
     ">
-        Device Status: {device_status}<b></b>
+        Device Status: {device_status}
     </div>
 """, unsafe_allow_html=True)
 
@@ -382,7 +382,7 @@ def page_device():
             mode="gauge+number",
             value=v,
              title={
-            'text': "<b>Voltage (V)</b>",
+            'text': "Voltage (V)",
             'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
             },
             gauge={
@@ -410,7 +410,7 @@ def page_device():
             mode="gauge+number",
             value=watt_value,
             title={
-            'text': "<b>Power (W)</b>",
+            'text': "Power (W)",
             'font': {'color': '#00c2ff', 'size': 16}  # bigger, more visible
             },
             gauge={
@@ -738,6 +738,7 @@ else:
 # FOOTER
 # ---------------------------------------------------------
 st.markdown("<div class='footer'><b>© 2025 Green Power Monitor · Developed by Akash Saha</b></div>", unsafe_allow_html=True)
+
 
 
 
